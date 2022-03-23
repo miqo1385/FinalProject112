@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import MovieType, Movie, Review
 import datetime
 from .forms import ReviewForms
-
+from django.urls import reverse_lazy, reverse
 # Create your tests here.
 class MovieTypeTest(TestCase):
     def setUp(self):
@@ -37,3 +37,15 @@ class NewReviewForm(TestCase):
 
         form=ReviewForms (data)
         self.assertTrue(form.is_valid)
+
+class New_Review_Authentication_Test(TestCase):
+    def setUp(self):
+        self.test_user=User.objects.create_user(username='testuser1', password='Alcachofa123#')
+        self.type=MovieType.objects.create(moviegender='romantic')
+        self.movie=Movie.objects.create(moviename='Titanic',moviegender=self.type, user=self.test_user, dateentered=datetime.date(2022,3,22), datemoviereleased=datetime.date(1997,12,25), moviebudget=200.00, producturl='https://en.wikipedia.org/wiki/Titanic_(1997_film)')
+
+
+    def test_redirect_if_not_logged_in(self):
+        response=self.client.get(reverse('newreview'))
+        self.assertRedirects(response, '/accounts/login/?next=/movie/newreview/')
+

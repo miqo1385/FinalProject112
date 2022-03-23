@@ -22,6 +22,8 @@ class Movie(models.Model):
     moviebudget=models.DecimalField(max_digits=10, decimal_places=2)
     producturl=models.URLField()
 
+
+
     def __str__(self):
         return self.moviename
 
